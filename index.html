@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE FREQUENCY FIELD — Visibility by Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Lato:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy: #0D0B1F;
+  --mid-purple: #2D1F4E;
+  --purple: #7B6FD4;
+  --purple-bright: #8B7FE8;
+  --cyan: #4ECFCF;
+  --lavender: #C4BEFF;
+  --white: #FFFFFF;
+  --gold: #F0C060;
+  --gold-dim: rgba(240,192,96,0.15);
+  --text-dim: rgba(196,190,255,0.55);
+  --card-bg: rgba(45,31,78,0.6);
+  --card-border: rgba(123,111,212,0.3);
+}
+
+body {
+  background: var(--navy);
+  color: var(--white);
+  font-family: 'Lato', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── STARFIELD ── */
+.starfield {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: white;
+  animation: twinkle var(--d, 4s) ease-in-out infinite var(--delay, 0s);
+}
+@keyframes twinkle {
+  0%, 100% { opacity: var(--min-op, 0.1); transform: scale(1); }
+  50% { opacity: var(--max-op, 0.7); transform: scale(1.3); }
+}
+.nebula {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(80px);
+}
+.nebula-1 {
+  width: 600px; height: 400px;
+  top: -100px; left: -100px;
+  background: radial-gradient(ellipse, rgba(123,111,212,0.18) 0%, transparent 70%);
+}
+.nebula-2 {
+  width: 500px; height: 500px;
+  bottom: 0; right: -100px;
+  background: radial-gradient(ellipse, rgba(78,207,207,0.12) 0%, transparent 70%);
+}
+.nebula-3 {
+  width: 400px; height: 300px;
+  top: 40%; left: 30%;
+  background: radial-gradient(ellipse, rgba(139,127,232,0.1) 0%, transparent 70%);
+}
+
+/* ── LAYOUT ── */
+.wrapper {
+  position: relative;
+  z-index: 2;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px 40px;
+}
+
+/* ── HEADER ── */
+.header {
+  text-align: center;
+  padding: 40px 20px 24px;
+  position: relative;
+}
+.eyebrow {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-bottom: 12px;
+  opacity: 0.85;
+}
+.main-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: clamp(2rem, 6vw, 3.8rem);
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, var(--lavender) 0%, var(--purple-bright) 40%, var(--cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.subtitle {
+  font-family: 'Lato', sans-serif;
+  font-size: 13px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+/* ── DAY TABS ── */
+.day-tabs {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 20px 0 0;
+  padding: 0 8px;
+}
+.day-tab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border-radius: 40px;
+  border: 1px solid rgba(123,111,212,0.25);
+  background: rgba(45,31,78,0.4);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.day-tab:hover {
+  border-color: var(--purple);
+  color: var(--lavender);
+  background: rgba(123,111,212,0.15);
+}
+.day-tab.active {
+  border-color: var(--cyan);
+  background: rgba(78,207,207,0.12);
+  color: var(--cyan);
+  box-shadow: 0 0 16px rgba(78,207,207,0.2);
+}
+.day-tab-icon { font-size: 14px; }
+.day-tab-info {}
+.day-tab-num { font-size: 9px; opacity: 0.7; display: block; }
+.day-tab-name { font-size: 10px; }
+
+/* ── SECTION TITLE ── */
+.section-header {
+  text-align: center;
+  margin: 28px 0 6px;
+}
+.section-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: 18px;
+  color: var(--lavender);
+}
+.section-sub {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+/* ── NODE SCROLL TRACK ── */
+.nodes-track-wrapper {
+  position: relative;
+  margin: 16px -16px 0;
+}
+.nodes-track {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 16px 24px 20px;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.nodes-track::-webkit-scrollbar { display: none; }
+
+/* ── NODE CARD ── */
+.node {
+  flex-shrink: 0;
+  width: 112px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  transition: transform 0.2s ease;
+  position: relative;
+}
+.node:hover { transform: translateY(-4px); }
+.node:hover .node-orb { box-shadow: 0 0 32px var(--orb-color, var(--purple)), 0 0 64px rgba(123,111,212,0.3); }
+
+.node-orb {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.15), transparent 60%),
+              radial-gradient(circle, var(--orb-color, var(--purple)) 0%, rgba(13,11,31,0.9) 100%);
+  border: 1px solid var(--orb-color, var(--purple));
+  box-shadow: 0 0 16px var(--orb-color, var(--purple)), inset 0 0 20px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  transition: all 0.3s ease;
+  position: relative;
+  margin-bottom: 10px;
+}
+.node-orb::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid var(--orb-color, var(--purple));
+  opacity: 0.3;
+  animation: orbit-pulse 3s ease-in-out infinite;
+}
+@keyframes orbit-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.08); opacity: 0.6; }
+}
+
+.node.active .node-orb {
+  box-shadow: 0 0 40px var(--orb-color, var(--purple)), 0 0 80px rgba(123,111,212,0.4);
+  border-width: 2px;
+}
+.node.active .node-orb::after {
+  opacity: 0.7;
+  inset: -6px;
+}
+.node-star {
+  position: absolute;
+  top: -4px; right: -4px;
+  width: 18px; height: 18px;
+  background: var(--gold);
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  box-shadow: 0 0 8px var(--gold);
+}
+.node.active .node-star { display: flex; }
+
+.node-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  text-align: center;
+  color: var(--lavender);
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding: 0 4px;
+}
+.node-energy {
+  margin-top: 5px;
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+.energy-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--orb-color, var(--purple));
+  opacity: 0.5;
+}
+.energy-dot.lit { opacity: 1; }
+
+/* ── LESSON CARD ── */
+.lesson-panel {
+  margin-top: 20px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  transition: all 0.35s ease;
+}
+.lesson-panel-inner {
+  padding: 24px 24px 20px;
+}
+.lesson-breadcrumb {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.lesson-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.lesson-emoji-badge {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.lesson-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: 18px;
+  color: var(--white);
+  line-height: 1.2;
+}
+
+/* Tabs */
+.lesson-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(123,111,212,0.2);
+  padding-bottom: 0;
+}
+.l-tab {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  padding: 8px 14px;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  color: var(--text-dim);
+  border: 1px solid transparent;
+  border-bottom: none;
+  margin-bottom: -1px;
+  transition: all 0.2s;
+}
+.l-tab:hover { color: var(--lavender); }
+.l-tab.active {
+  color: var(--cyan);
+  border-color: rgba(123,111,212,0.3);
+  border-bottom-color: var(--card-bg);
+  background: var(--card-bg);
+}
+
+.lesson-body { display: none; }
+.lesson-body.visible { display: block; }
+
+.lesson-text {
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 16px;
+}
+
+/* Gold nugget */
+.gold-nugget {
+  background: var(--gold-dim);
+  border: 1px solid rgba(240,192,96,0.3);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-top: 12px;
+}
+.nugget-label {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.nugget-text {
+  font-style: italic;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--gold);
+  line-height: 1.5;
+}
+
+/* Belief shift */
+.belief-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.belief-before, .belief-after {
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.belief-before {
+  background: rgba(100,100,120,0.2);
+  border: 1px solid rgba(150,150,180,0.2);
+}
+.belief-after {
+  background: rgba(78,207,207,0.08);
+  border: 1px solid rgba(78,207,207,0.3);
+}
+.belief-label {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.belief-before .belief-label { color: rgba(200,200,220,0.5); }
+.belief-after .belief-label { color: var(--cyan); }
+.belief-before .belief-text {
+  font-size: 13px;
+  color: rgba(200,200,220,0.5);
+  text-decoration: line-through;
+  line-height: 1.5;
+}
+.belief-after .belief-text {
+  font-size: 14px;
+  color: var(--cyan);
+  font-weight: 400;
+  line-height: 1.5;
+}
+.belief-arrow {
+  text-align: center;
+  font-size: 20px;
+  color: var(--purple);
+}
+
+/* Nav */
+.lesson-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(123,111,212,0.2);
+}
+.nav-counter {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-dim);
+}
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 30px;
+  border: 1px solid rgba(123,111,212,0.35);
+  background: rgba(123,111,212,0.1);
+  color: var(--lavender);
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+}
+.nav-btn:hover {
+  background: rgba(123,111,212,0.25);
+  border-color: var(--purple);
+}
+.nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.nav-btn.next {
+  background: rgba(78,207,207,0.1);
+  border-color: rgba(78,207,207,0.35);
+  color: var(--cyan);
+}
+.nav-btn.next:hover {
+  background: rgba(78,207,207,0.2);
+}
+
+/* ── STAT BAR ── */
+.stat-bar {
+  display: flex;
+  justify-content: center;
+  gap: clamp(16px, 4vw, 48px);
+  padding: 20px;
+  margin-top: 28px;
+  border-top: 1px solid rgba(123,111,212,0.2);
+}
+.stat-item {
+  text-align: center;
+}
+.stat-icon { font-size: 18px; display: block; margin-bottom: 4px; }
+.stat-num {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: 22px;
+  color: var(--white);
+  display: block;
+  line-height: 1;
+}
+.stat-label {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  display: block;
+  margin-top: 3px;
+}
+
+/* scrollbar fade edges */
+.nodes-track-wrapper::before,
+.nodes-track-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 40px;
+  pointer-events: none;
+  z-index: 3;
+}
+.nodes-track-wrapper::before {
+  left: 0;
+  background: linear-gradient(to right, var(--navy), transparent);
+}
+.nodes-track-wrapper::after {
+  right: 0;
+  background: linear-gradient(to left, var(--navy), transparent);
+}
+
+/* mobile tweaks */
+@media (max-width: 600px) {
+  .lesson-title { font-size: 15px; }
+  .day-tab { padding: 6px 10px; }
+  .day-tab-name { font-size: 9px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Stars -->
+<div class="starfield" id="starfield"></div>
+<div class="nebula nebula-1"></div>
+<div class="nebula nebula-2"></div>
+<div class="nebula nebula-3"></div>
+
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="eyebrow">Visibility by Design Challenge</div>
+    <h1 class="main-title">THE FREQUENCY FIELD</h1>
+    <p class="subtitle">72 Lessons across 6 Days — 144 Belief Shifts</p>
+  </div>
+
+  <!-- DAY TABS -->
+  <div class="day-tabs" id="dayTabs"></div>
+
+  <!-- SECTION HEADER -->
+  <div class="section-header">
+    <div class="section-title" id="sectionTitle"></div>
+    <div class="section-sub" id="sectionSub"></div>
+  </div>
+
+  <!-- NODE TRACK -->
+  <div class="nodes-track-wrapper">
+    <div class="nodes-track" id="nodesTrack"></div>
+  </div>
+
+  <!-- LESSON PANEL -->
+  <div class="lesson-panel" id="lessonPanel">
+    <div class="lesson-panel-inner" id="lessonInner">
+      <p style="text-align:center; color:var(--text-dim); padding: 20px 0; font-size:13px;">✦ Tap a node above to explore its lesson ✦</p>
+    </div>
+  </div>
+
+  <!-- STAT BAR -->
+  <div class="stat-bar">
+    <div class="stat-item"><span class="stat-icon">📅</span><span class="stat-num">6</span><span class="stat-label">Days</span></div>
+    <div class="stat-item"><span class="stat-icon">🏛️</span><span class="stat-num">72</span><span class="stat-label">Lessons</span></div>
+    <div class="stat-item"><span class="stat-icon">🔄</span><span class="stat-num">144</span><span class="stat-label">Belief Shifts</span></div>
+    <div class="stat-item"><span class="stat-icon">⭐</span><span class="stat-num">28</span><span class="stat-label">Challenge Days</span></div>
+  </div>
+
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const DAYS = [
+  {
+    day: 1,
+    title: "Why Visibility Is Everything",
+    node: "THE PORTAL",
+    platform: "Skool Community",
+    emoji: "🏛️",
+    color: "#8B7FE8",
+    lessons: [
+      {
+        emoji: "🎉",
+        title: "The Pre-Party Setup",
+        lesson: "The decorations are up, the music's on, and nobody's arrived yet — and that's exactly when you open the doors. You launch where you are, not where you wish you were. Then you let your community co-create what it becomes. Your Skool About page is the party invite. You set the vibe. They help you decide what stays.",
+        before: "I need everything figured out and perfect before I can open the doors.",
+        after: "I open the doors before I'm ready and let the people who show up shape what it becomes.",
+        nugget: "Set up the party before the guests arrive. Then let the night take shape."
+      },
+      {
+        emoji: "🌊",
+        title: "Generosity Compounds",
+        lesson: "At the beginning you are the main one showing up. You're posting, commenting, encouraging, teaching — and it can feel slow and one-sided. But generosity in a community is never a 1:1 return. It's always 10x. It just doesn't happen immediately. The more you give, the more you receive — but there's a delay. Keep going through the delay. That's where most people quit and where you win.",
+        before: "If I'm putting in more than I'm getting back, something is wrong.",
+        after: "Generosity compounds. The return is always 10x — it just doesn't arrive on my timeline.",
+        nugget: "The more you give, the more you receive. It's never 1:1. It's always 10x."
+      },
+      {
+        emoji: "🎯",
+        title: "Visibility Makes Sales Inevitable",
+        lesson: "Our only job is to make ourselves discoverable to the people who are already looking for us. They already want what you have. They're ready to buy it. They just don't know you exist yet. Visibility is the bridge between your gifts and their money.",
+        before: "I need to convince people to buy from me.",
+        after: "My people are already looking for me. I just need to be findable.",
+        nugget: "They're already looking for you. They just need to know you exist."
+      },
+      {
+        emoji: "🏠",
+        title: "Skool Is Your Home",
+        lesson: "Every platform you build on is rented land. Skool is your home — the one destination everything else points to. Every YouTube video, every TikTok, every Instagram reel has one job: bring them back here. You don't own your followers. You own your community.",
+        before: "I need to build a huge following on every platform.",
+        after: "I build one home. Every platform is just a road that leads there.",
+        nugget: "Social media can change their algorithm tomorrow. Your Skool community is yours."
+      },
+      {
+        emoji: "🪜",
+        title: "Freemium to 100, Then Flip",
+        lesson: "Start with a free community to build social proof, get real people in the room, and prove the concept. Once you're at around 100 members and your systems are solid — your onboarding, your engagement rhythm, your weekly content — that's when you flip to paid and start running ads. Ads on an empty community just waste money. Social proof is what makes ads convert.",
+        before: "I should go paid from day one to attract serious members.",
+        after: "Free builds the proof. Paid builds the revenue. Ads amplify what's already working.",
+        nugget: "Get to 100 members first. Then flip. Then amplify. In that order."
+      },
+      {
+        emoji: "🌊",
+        title: "Push vs. Pull Marketing",
+        lesson: "Ads are amazing for top-of-funnel reach — you can target quality leads with your dollars. But those people will look you up to make sure you're real. That's what YouTube and content validate. Push brings them in. Pull keeps them and converts them. You need both.",
+        before: "I have to choose between paid ads and organic content.",
+        after: "Ads bring them in. Content validates me. Both serve a different job.",
+        nugget: "In the age of AI, authenticity is your superpower. It's the only thing AI can't replicate."
+      },
+      {
+        emoji: "📊",
+        title: "What Gets Measured Moves",
+        lesson: "The Visibility Tracker isn't about perfection — it's about feedback loops. You see what's working faster. You course-correct before spending weeks on something that isn't converting. Daily data creates weekly clarity and monthly momentum.",
+        before: "Tracking my numbers is stressful and discouraging.",
+        after: "My tracker is a feedback loop. The data tells the truth my feelings can't.",
+        nugget: "Entrepreneurs who track grow 3x faster than those who don't."
+      },
+      {
+        emoji: "💰",
+        title: "Followers Never Matter",
+        lesson: "You can have under 10,000 followers on TikTok and build a six-figure business. On YouTube, people will book calls with you quoting you back to yourself — ready to pay in full — when you had as few as 2–3 hundred subscribers. Quality of connection beats quantity of followers every time.",
+        before: "I need a big following before I can make real money.",
+        after: "A small aligned audience is worth more than a massive unaligned one.",
+        nugget: "I had almost 10,000 TikTok followers. My YouTube with 300 subscribers converted better."
+      },
+      {
+        emoji: "🌐",
+        title: "The Four-Platform Ecosystem",
+        lesson: "You're not on four platforms. You're running one system with four entry points. YouTube builds deep trust. Instagram builds authority. TikTok builds reach. Skool converts all of it into community and revenue. None of them work in isolation — they feed each other.",
+        before: "Managing multiple platforms is overwhelming and exhausting.",
+        after: "I run one system. Each platform is just a different entry point to the same home.",
+        nugget: "You're not 'on' 4 platforms. You're running one system with 4 entry points."
+      },
+      {
+        emoji: "🔥",
+        title: "The 7-Hour Trust Threshold",
+        lesson: "Google research shows it takes someone an average of 7 hours with you, across 11 touchpoints on 4 different platforms, before they trust you enough to buy. With your Binge Bank method, someone can hit all 7 hours in one sitting — binging your videos in a series. You collapse the timeline.",
+        before: "Building trust with clients takes months of consistent work.",
+        after: "One well-structured Binge Bank can build 7 hours of trust in one sitting.",
+        nugget: "YouTube is how you collapse timelines."
+      },
+      {
+        emoji: "✨",
+        title: "The Role Model Letter",
+        lesson: "Every morning you read a letter written from your future self — your role model. Not an aspirational fantasy, but the version of you who has already done the work. This grounds your daily visibility actions in identity, not just hustle. You show up because you know who you're becoming.",
+        before: "Motivation fades and I can't stay consistent.",
+        after: "When I'm rooted in my future identity, showing up isn't discipline — it's devotion.",
+        nugget: "We don't show up out of hustle. We show up because we know who we're becoming."
+      },
+      {
+        emoji: "🌱",
+        title: "Plant the Seeds. The Work Works.",
+        lesson: "Every piece of content you publish is a seed. You may not see the harvest immediately — but the work always works. Nobody joins your community the day they find you. They find a TikTok, bookmark it, find your YouTube, join your Skool weeks later. The seeds compound.",
+        before: "If a post doesn't get engagement, it was a waste of time.",
+        after: "Every seed planted is working, even when I can't see it. The work always works.",
+        nugget: "It doesn't matter who shows up as long as you do. You're planting the seeds."
+      }
+    ]
+  },
+  {
+    day: 2,
+    title: "Your Town's Foundation",
+    node: "THE BEACON",
+    platform: "The Offer",
+    emoji: "📡",
+    color: "#C4A0F0",
+    lessons: [
+      {
+        emoji: "🧬",
+        title: "Your Design Is the Strategy",
+        lesson: "Human Design doesn't just tell you who you are — it tells you how your energy actually works in business. Most business advice is created by and for Generators and Manifesting Generators, who are 70% of the population. If you're a Projector, Manifestor, or Reflector following that advice, you will burn out.",
+        before: "If the business strategy worked for someone else, I should be able to make it work for me.",
+        after: "My energy type determines my strategy. Generic advice wasn't built for my design.",
+        nugget: "Your human design matters not because knowing it makes you money, but because it helps you build an offer you can actually sustain."
+      },
+      {
+        emoji: "⭐",
+        title: "North Node Direction",
+        lesson: "Your North Node is where you're going — the lesson you came here to learn, the transformation you're meant to embody, the work you're here to do. Your business should serve your North Node evolution, not keep you stuck in your South Node comfort zone. We teach what we most need to learn.",
+        before: "I should build a business based on what I already know and have mastered.",
+        after: "My business is meant to grow me into my North Node. I teach what I'm becoming.",
+        nugget: "Our job as coaches and guides is to solve our own problems and share the solution."
+      },
+      {
+        emoji: "🔓",
+        title: "You Can't Scale From an Open Center",
+        lesson: "You cannot build a sustainable offer from an open center — it is not a reliable source of energy for you. Open centers are where you pick up conditioning from others. If you have an open heart, you'll constantly overwork to feel worthy. If you have an open sacral, you'll try to hustle like a Generator and burn out.",
+        before: "Working harder and longer is how I prove I'm serious about my business.",
+        after: "I build from my defined centers — my consistent gifts. Everything else is conditioning.",
+        nugget: "We never want to scale or build an offer from an open center. It will not sustain."
+      },
+      {
+        emoji: "🎪",
+        title: "The Party Host Mindset",
+        lesson: "Stop acting like a professor who lectures from the front of the room. You are the party host — you go first, you create the vibe, you make it safe for others to show up. The community follows the energy of the leader. If you show up with enthusiasm, curiosity, and vulnerability, they will too.",
+        before: "My community should engage with content I post. It's their job to show up.",
+        after: "I'm the party host. I set the tone. I go first. My energy is the invitation.",
+        nugget: "Leaders go first. Always."
+      },
+      {
+        emoji: "📋",
+        title: "The About Page as Sales Page",
+        lesson: "Your Skool About page is your sales page. It is the single most important piece of copy in your entire ecosystem because it is what converts a visitor into a member. 90% of people who land there decide in 3 seconds whether to stay. It needs to speak to their situation, not just your credentials.",
+        before: "My about page just needs to describe what my community is about.",
+        after: "My about page is a conversion tool. It speaks directly to my ideal client's current pain.",
+        nugget: "Words aren't everything. Only the RIGHT words are everything."
+      },
+      {
+        emoji: "🎮",
+        title: "Gamification Drives Action",
+        lesson: "Don't just welcome new members — get them to DO something. The activation action makes them comment, introduce themselves, or unlock a free course. Gamification creates investment. The faster they take an action, the more committed they become. People who act immediately are the ones who stay and upgrade.",
+        before: "People will engage with my community when they're ready.",
+        after: "Immediate action creates immediate investment. I design the first step, not the first impression.",
+        nugget: "The faster they take action, the more invested they become."
+      },
+      {
+        emoji: "💌",
+        title: "The Personalized Loom Welcome",
+        lesson: "Do NOT send generic auto-DMs when someone joins your community. They feel robotic and kill connection immediately. A personalized Loom video — even just 60 seconds — where you say their name and reference what they shared in their intro post, changes everything. That personal touch is your moat.",
+        before: "I can automate my welcome messages to save time.",
+        after: "Personal connection is my competitive advantage. A Loom welcome can't be automated away.",
+        nugget: "Generic feels robotic. Personal feels like magic. Always choose magic."
+      },
+      {
+        emoji: "🧲",
+        title: "Two-Step Post Strategy",
+        lesson: "The two-step post is the most powerful organic growth mechanism for Skool. Post value content on Instagram or TikTok, end with 'comment this word for this resource.' When they comment, reply with a DM sending them into your Skool community. Sales happen through conversations, and the two-step starts the conversation.",
+        before: "I have to manually sell people on joining my community.",
+        after: "My content starts conversations automatically. The two-step does the selling for me.",
+        nugget: "Sales always happen through conversations. The two-step starts them."
+      },
+      {
+        emoji: "🏆",
+        title: "Activity Allies",
+        lesson: "Partner with other Skool community owners to genuinely engage with each other's content. This isn't fake engagement — it's strategic generosity. When you consistently add value to their community, your profile activity increases, which boosts your discovery rank on Skool. Giving increases your own exposure.",
+        before: "I have to compete with other community owners in my niche.",
+        after: "Other community owners are my allies. Genuine generosity increases my own visibility.",
+        nugget: "Giving value to others increases your own profile exposure. Generosity is a growth strategy."
+      },
+      {
+        emoji: "🌙",
+        title: "Design Your Offer Around Your Life",
+        lesson: "Your offer is the vehicle. Your vision is the destination. How many hours a day do you want to work? How do you want to feel at the end of the workday? Your offer must support your energetic non-negotiables — especially by type. Projectors have a 4-hour max client-facing window. Design backward from your life.",
+        before: "I'll design the life I want once my business is successful.",
+        after: "My offer is designed around my life first. The business serves the vision, not the other way around.",
+        nugget: "Your offer is the vehicle. Your vision is the destination."
+      },
+      {
+        emoji: "📣",
+        title: "The 7 Post Types",
+        lesson: "A Skool community needs seven types of posts to stay alive: Encouragement, Educational, Discussion, Transparency, Collaboration, Product Development, and Personal Connection. A community that only sees one type goes cold. Variety creates vitality. Your weekly rhythm needs all seven in rotation.",
+        before: "I should just post educational content — that's what people pay for.",
+        after: "Community vitality requires 7 types of content. Education is just one of them.",
+        nugget: "A community that only sees one type of post goes cold. Variety = vitality."
+      },
+      {
+        emoji: "🔑",
+        title: "Niche Down to Blow Up",
+        lesson: "If you could swap your ideal client for any other group and your message would still work, you're too generic. Your niche should feel like a love letter to one specific person. The more specific you are, the more people feel like you're speaking directly to them. Specificity is magnetism.",
+        before: "A broader niche means more potential clients and more money.",
+        after: "The more specific my niche, the more magnetic I become to exactly the right people.",
+        nugget: "Your niche is a love letter to one specific person. Write it to them."
+      },
+      {
+        emoji: "🎮",
+        title: "Infinite vs. Finite Game",
+        lesson: "A finite challenge — 5 days, clear outcome, defined endpoint — naturally sells a high-ticket offer. The transformation is complete and the next step is obvious. An infinite challenge — 28 days, ongoing theme like visibility — naturally sells a recurring membership, because the work never ends. Visibility isn't something you do once. You're always going to have to show up. Match your challenge format to the offer you want to sell or the conversion breaks down.",
+        before: "Any challenge format will work to sell any offer.",
+        after: "My challenge format has to match my offer. Infinite game sells membership. Finite game sells high ticket.",
+        nugget: "If you want to sell a membership, play an infinite game. Visibility never ends — and neither does the community."
+      }
+    ]
+  },
+  {
+    day: 3,
+    title: "Highway Signs to Your Town",
+    node: "THE ROOT SYSTEM",
+    platform: "YouTube",
+    emoji: "▶️",
+    color: "#FF6B6B",
+    lessons: [
+      {
+        emoji: "🌳",
+        title: "YouTube Is the Root System",
+        lesson: "Short-form gets eyeballs. YouTube builds the roots. It's the long-form trust infrastructure that makes everything else convert. When someone finds you through a TikTok, they'll Google you. When they find your YouTube and spend an hour with you, they arrive at your Skool community already primed to buy.",
+        before: "YouTube is too time-consuming to be worth the effort for a small creator.",
+        after: "YouTube is the root system that feeds everything. One video works forever.",
+        nugget: "YouTube is how you go from strangers to clients without a single sales call."
+      },
+      {
+        emoji: "📚",
+        title: "The Binge Bank Method",
+        lesson: "5–7 evergreen authority videos that work as a trust-building series. Foundation content (your philosophy and origin story), Transformation content (proof your method works), and Invitation content (the bridge to your Skool community). Someone can binge all 7 in one sitting and go from cold to ready-to-buy.",
+        before: "I need to keep posting new content constantly to stay relevant.",
+        after: "7 evergreen videos can do the trust-building work of 7 months of posting.",
+        nugget: "When they've binged your Binge Bank, they arrive at your Skool already primed to pay."
+      },
+      {
+        emoji: "⏰",
+        title: "The Infinite ROI",
+        lesson: "If a YouTube video takes you 3 hours to make and 27 people watch it for an average of an hour each — that's 27 hours of attention generated from 3 hours of work. No other content asset does that. You make it once. It works forever. Unlike a TikTok Live that disappears the moment it ends, a YouTube video is an asset that compounds every single day it exists.",
+        before: "Creating long-form content takes too much time to be worth it.",
+        after: "One YouTube video can generate infinite return on time invested. It works while I sleep.",
+        nugget: "When you're using YouTube, 24 hours in a day isn't true."
+      },
+      {
+        emoji: "🎙️",
+        title: "Turn On the Camera and Do You",
+        lesson: "You don't need perfect lighting, a professional setup, or a perfectly scripted video. Myron Golden said: 'I don't want you to do YouTube. I want you to turn on the video and do you.' Camera presence is a skill, not a talent — and you've already done way harder things than pressing record.",
+        before: "I'm not ready to film YouTube videos. I need to be better on camera first.",
+        after: "I press record and do me. Getting better on camera is the only way to get better on camera.",
+        nugget: "This is 11 years in the making. You've done way harder stuff than YouTube."
+      },
+      {
+        emoji: "🔄",
+        title: "YouTube → Skool Pipeline",
+        lesson: "The highest-performing Skool communities in the world use YouTube as their primary traffic source. Pitch your Skool community in the first 30–60 seconds of every video. Have a pinned comment with the link. The best content creators don't just grow an audience — they route that audience home.",
+        before: "YouTube and Skool are separate strategies I'll figure out eventually.",
+        after: "YouTube and Skool are one integrated system. YouTube is the highway. Skool is the town.",
+        nugget: "The best Skool communities? Their funnel is literally: YouTube to Skool."
+      },
+      {
+        emoji: "🧠",
+        title: "Upload Your Business Brain",
+        lesson: "Your YouTube Content Studio is a prompt-delivery tool that helps you script, title, and thumbnail your videos from your own transcripts and ideas — without starting from a blank page. You're not creating from scratch. You're extracting and multiplying what's already inside you.",
+        before: "Creating YouTube content from scratch takes too long and overwhelms me.",
+        after: "I don't create from scratch. I extract from what I already know and teach.",
+        nugget: "Everything already exists inside what you know. The system just surfaces it."
+      },
+      {
+        emoji: "🎯",
+        title: "Title First, Video Second",
+        lesson: "The title and thumbnail are the video. Everything else is fulfillment. Before you press record, you need to know exactly what promise your title makes — because your video just needs to deliver on that promise. If you can't nail the title, you don't understand what you're actually teaching yet.",
+        before: "I'll figure out the title after I record the video.",
+        after: "The title is the video. I nail the title first, then the video writes itself.",
+        nugget: "Followers don't matter. Virality doesn't matter. The only thing that matters is actual sales."
+      },
+      {
+        emoji: "🏷️",
+        title: "Thumbnail Is the Ad",
+        lesson: "Your thumbnail is the advertisement for your video. In a sea of content, it's competing for one thing: the click. It needs a clear emotional expression, bold readable text, and your face. The title and thumbnail need to work together — they're asking the same question from two different angles.",
+        before: "If my content is good enough, people will click on it regardless of the thumbnail.",
+        after: "My thumbnail is the ad. My title is the hook. Both have to earn the click.",
+        nugget: "The thumbnail is the billboard. Make it stop the scroll."
+      },
+      {
+        emoji: "♾️",
+        title: "Infinite Return on Investment",
+        lesson: "Myron Golden posted his weekly Bible studies on YouTube without knowing anything about the platform. He created one video. 27 hours of views from 3 hours of work. That's not just ROI — it's an asset. Unlike TikTok Lives that disappear, YouTube videos compound. The older they get, the more they've worked.",
+        before: "Live content and real-time engagement are the most valuable things I can create.",
+        after: "YouTube videos are assets. Every view they get after I press publish is free return.",
+        nugget: "I created this video once. It has been watched for 27.9 hours. That's infinite ROI."
+      },
+      {
+        emoji: "💪",
+        title: "Depth Builds Buyers",
+        lesson: "TikTok gets you 10,000 followers but every client requires back-and-forth in DMs and a sales call. YouTube gets you 300 subscribers and people book calls quoting you back to yourself, ready to pay in full. The depth of connection on YouTube is incomparable. Depth creates buyers. Reach creates followers.",
+        before: "More followers equals more sales.",
+        after: "Depth of connection creates buyers. Reach creates followers. I want buyers.",
+        nugget: "People quote me back to myself. That's what YouTube does."
+      },
+      {
+        emoji: "🎬",
+        title: "The Loom-First Strategy",
+        lesson: "You don't even have to upload to YouTube to get started. Record a 5-minute Loom and share it in your Skool community. That's a win. Then upload it to YouTube. In the words of Seth Godin — if it doesn't ship, it doesn't count. Ship the imperfect thing. Get 1% better every time.",
+        before: "I'll start my YouTube channel when I can do it properly.",
+        after: "A Loom shared in my community is a win. Ship the imperfect thing.",
+        nugget: "If it doesn't ship, it doesn't count. You gotta ship it for it to matter."
+      },
+      {
+        emoji: "🛡️",
+        title: "Authenticity Is Your Moat",
+        lesson: "In the age of AI, anyone can generate content. Anyone can create faceless brands and perfect AI images. But no one can replicate you — your story, your imperfection, your actual caring about people. Your personal brand is the only thing that gets more valuable as AI gets more powerful. It's your protection.",
+        before: "AI-generated content and faceless brands are a threat to my business.",
+        after: "AI makes authenticity more valuable, not less. My personal brand is my moat.",
+        nugget: "AI can replicate information. It cannot replicate you."
+      },
+      {
+        emoji: "📅",
+        title: "The Weekly Video Rhythm",
+        lesson: "One video a week is enough to compound dramatically over time. Know your topic by Sunday. Script it Monday. Record and upload Tuesday–Wednesday. Let your weekly content engine do the rest. Consistency is a system problem, not a motivation problem. Build the system and the system keeps you consistent.",
+        before: "I can't commit to a consistent content schedule long-term.",
+        after: "Consistency is a system problem. I build the system once. The system keeps me consistent.",
+        nugget: "Consistency is a system problem, not a motivation problem."
+      }
+    ]
+  },
+  {
+    day: 4,
+    title: "The Instagram Glow Up",
+    node: "THE GARDEN GATE",
+    platform: "Instagram",
+    emoji: "🌿",
+    color: "#4ECFCF",
+    lessons: [
+      {
+        emoji: "🌿",
+        title: "Era of the Nano-Influencer",
+        lesson: "2026 marks the full transition from the Aesthetic Influencer to the Nano-Influencer. The weirder, more niche, and more authentic you are, the better. You don't need perfect presets or millions of followers. Adam Mosseri literally said this: that's not what Instagram is doing anymore. This is your moment.",
+        before: "I need a perfectly curated, aesthetic feed to be taken seriously on Instagram.",
+        after: "Raw, real, and niche wins in 2026. My imperfection is the algorithm's favorite thing.",
+        nugget: "The more weird stuff you're into and willing to share, the more reach you get."
+      },
+      {
+        emoji: "📱",
+        title: "Interest Media Not Social Media",
+        lesson: "We've moved from social media — showing content to your followers — to interest media, where the algorithm shows content to people who share your interests. Like TikTok did first. This means the more specific and authentic your content, the more strangers with exactly the right values and beliefs will find you.",
+        before: "I need to grow my follower count to expand my reach.",
+        after: "My specificity is my reach. The right strangers are already looking for what I talk about.",
+        nugget: "We're not doing social media anymore. We're doing interest media."
+      },
+      {
+        emoji: "🔍",
+        title: "Bio SEO Is Your Superpower",
+        lesson: "Instagram searches the NAME field, not your bio. When someone types 'human design coach' into Instagram search, profiles with that phrase in their name field surface first. Not 'Amanda F. Smith, your business BFF' — that's not searchable. Your name field is 64 characters of pure SEO power.",
+        before: "My Instagram name should be catchy and fun, not keyword-heavy.",
+        after: "My name field is my SEO. Searchable keywords in my name = more discoverability.",
+        nugget: "People are searching for what you do. Make sure your name field says it."
+      },
+      {
+        emoji: "📝",
+        title: "The 4-Line Bio Formula",
+        lesson: "Line 1: Your name + a searchable keyword. Line 2: Who you help and what outcome. Line 3: Your unique methodology (Human Design, astrology, Skool). Line 4: One specific CTA with a downward emoji. Your bio can only be 120 characters — every word is doing work or wasting space.",
+        before: "My bio should express my personality and be memorable.",
+        after: "My bio has one job: convert profile visitors to followers and link clicks in 3 seconds.",
+        nugget: "An optimized bio can increase your profile-to-follow conversion rate by up to 25%."
+      },
+      {
+        emoji: "📌",
+        title: "Three Pinned Posts = Your Funnel",
+        lesson: "Your three pinned posts are a static sales funnel at the top of your grid 24/7. They answer three questions a stranger asks: Is this person for me? (Connect), Can they actually help me? (Compel), What do I do next? (Convert). Every visitor forms their first opinion in 5–7 seconds. Your pinned posts control that.",
+        before: "Pinned posts are just for my most popular content.",
+        after: "My three pinned posts are a conversion funnel. Connect → Compel → Convert.",
+        nugget: "Visitors form opinions about your profile in 5–7 seconds. Your pinned posts own that window."
+      },
+      {
+        emoji: "🃏",
+        title: "Carousels Dominate Saves",
+        lesson: "Carousels get the highest save rates of any content format — and saves are the number one algorithm signal in 2026. Instagram re-shows unseen slides to people who didn't swipe through. That means every slide is a second chance to hook them. Most people only optimize slide one. You optimize every slide.",
+        before: "Reels are the only format worth making on Instagram.",
+        after: "Carousels are the highest-converting format for authority and saves. I use both.",
+        nugget: "Saves are the number one algorithm signal in 2026. Carousels get the most saves."
+      },
+      {
+        emoji: "🌶️",
+        title: "Hot Takes Create Polarization",
+        lesson: "If your content isn't repelling anyone, it isn't attracting anyone either. You need an 'enemy' — not a person, but a broken belief or a bad strategy. Challenge the way people are going about things, not who they are. Strong opinions based on lived experience create the most magnetic content. Say the thing.",
+        before: "Being agreeable and universal in my content will attract more people.",
+        after: "Polarization is magnetism. If nobody disagrees with me, nobody notices me.",
+        nugget: "If your content isn't repelling anyone, it isn't attracting anyone."
+      },
+      {
+        emoji: "🤖",
+        title: "ManyChat Comment Funnels",
+        lesson: "Instagram penalizes you for sending people off the platform with a link in a post. The workaround: have them comment a keyword, which triggers a ManyChat DM automation that delivers the resource and your Skool link. 80% of your content should use this two-step structure. It's the highest converting strategy for coaches.",
+        before: "I should put my link in every post so people can easily find my community.",
+        after: "Comment funnels convert better than links in posts. The conversation is the conversion.",
+        nugget: "Sales happen through conversations. Always. The comment funnel starts them."
+      },
+      {
+        emoji: "🎬",
+        title: "Video Length Rules",
+        lesson: "7-second videos with trending audio get 300% retention in the algorithm because people actually watch the whole thing. Hot takes with a one-liner on screen are perfect for this. 30–45 second reels build authority. 15–30 second videos with a pain point and immediate CTA convert. The rule: as short as possible, as long as needed.",
+        before: "Longer videos show more value and will perform better.",
+        after: "The right length is as short as possible and as long as necessary. Not a second more.",
+        nugget: "The video needs to be as short as possible and as long as it needs to be to deliver the value."
+      },
+      {
+        emoji: "🎭",
+        title: "Hook Stacking",
+        lesson: "The most effective short-form videos stack hooks — your verbal hook hits one angle, and your text-on-screen title hook hits a completely different angle. Two entry points into the same video. Contrarian, Mistake/Loss, Question, Numbered List, Open Loop, Time-Based, Problem/Solution, Pattern Interrupt — use them together.",
+        before: "One good hook is enough to stop the scroll.",
+        after: "I stack my verbal hook and title hook to hit two different angles in one piece of content.",
+        nugget: "Stack your hooks. Hit them from two angles at once. Double your chances of stopping the scroll."
+      },
+      {
+        emoji: "🛠️",
+        title: "The Repurposing Engine",
+        lesson: "One YouTube transcript into the Repurposing Engine gives you seven standalone short-form production briefs — each oriented for a cold TikTok or Instagram audience. You're not verbatim clipping your YouTube. You're re-recording native content that speaks to strangers, not subscribers. One source powers the whole week.",
+        before: "I need to create separate unique content for every platform.",
+        after: "One YouTube transcript powers seven short-form pieces across every platform.",
+        nugget: "You're not repurposing word-for-word. You're re-orienting for a cold audience."
+      },
+      {
+        emoji: "💎",
+        title: "Your Situation Is Their Destination",
+        lesson: "Where you are right now is your ideal client's desired destination. The thing you figured out last month is the breakthrough they're still struggling with today. Stop waiting to be further ahead to start showing up. Your current situation — including the mess — is exactly what your audience needs to see.",
+        before: "I need to be more successful before I can be credible enough to teach.",
+        after: "My current situation is my ideal client's desired destination. I'm already ahead enough.",
+        nugget: "Where you are right now is perfect. Your current situation is your ideal client's desired situation."
+      }
+    ]
+  },
+  {
+    day: 5,
+    title: "Recruiting From the Big Town",
+    node: "THE WIND",
+    platform: "TikTok",
+    emoji: "🎵",
+    color: "#F0C060",
+    lessons: [
+      {
+        emoji: "🌪️",
+        title: "Best Algorithm on the Internet",
+        lesson: "TikTok has the best algorithm on social media, full stop. It was the first platform to show content based on interests — not followers. Every video has the potential to go viral regardless of your follower count. No other platform comes close for starting from zero and getting eyeballs immediately.",
+        before: "I need to build a following before TikTok will show my content to anyone.",
+        after: "On TikTok, every video starts fresh. Zero followers is not a disadvantage.",
+        nugget: "TikTok was the first platform that didn't care about your following. It cared about your content."
+      },
+      {
+        emoji: "🆓",
+        title: "Freedom to Be Fully You",
+        lesson: "TikTok felt safer to build on because nobody knew you there. You could be whoever you wanted to be and talk about things that actually mattered without the social pressure of people who know you in real life. That freedom is still there. The platform gives you a blank slate to build your most aligned identity.",
+        before: "I'm worried about what people I know will think if they see my content.",
+        after: "On TikTok, nobody knows me. I can show up as my most aligned self freely.",
+        nugget: "I could be whoever I wanted to be and talk about things that actually mattered."
+      },
+      {
+        emoji: "⚡",
+        title: "7-Second Hot Takes",
+        lesson: "7-second videos with trending audio are the single fastest way to get discovered on TikTok. A hot take as text on screen plus trending audio gets 300% retention because people watch the whole thing. Your Hot Take Miner surfaces all your contrarian beliefs so you always have content ready to record in under a minute.",
+        before: "I need to create longer, more detailed content to show my expertise.",
+        after: "7 seconds of a genuine hot take builds more credibility than 7 minutes of generic advice.",
+        nugget: "A 7-second hot take with trending audio gets 300% retention in the algorithm."
+      },
+      {
+        emoji: "🧭",
+        title: "Profile as Landing Page",
+        lesson: "If someone who just discovered your TikTok cold landed on your profile — would they get it within 3 seconds? Would they know what you do, who you help, and what to do next? Your TikTok profile is a landing page. The same four-line bio format from Instagram applies. One direct link. Your Skool community.",
+        before: "My TikTok bio just needs to show my personality.",
+        after: "My TikTok profile is a landing page. It converts cold strangers into community members.",
+        nugget: "Skip the link tree. Send everyone directly to your Skool. Reduce the cognitive load."
+      },
+      {
+        emoji: "🧩",
+        title: "Brain Dump Mode",
+        lesson: "You don't need a YouTube video to run the Repurposing Engine. Open your phone, record a Loom of yourself talking through your content ideas from your notes app — your 'content sauce.' Switch the engine to Brain Dump Mode and paste in the transcript. It surfaces 7 pieces of native TikTok content from your raw thoughts.",
+        before: "I need to film a YouTube video before I can create short-form content.",
+        after: "A voice memo of my content ideas is enough to generate a week of TikTok content.",
+        nugget: "Brain dump mode turns your scattered ideas into a week of content in minutes."
+      },
+      {
+        emoji: "📡",
+        title: "Go Live Strategically",
+        lesson: "Going live on TikTok is free distribution. If nobody shows up — use that time to record all your short-form content for the week from your scripts. If people do show up — teach the same content from your YouTube video that week and answer questions. Either way, you're creating content. Nobody showing up is never a waste.",
+        before: "If nobody shows up to my live, it wasn't worth doing.",
+        after: "An empty live room is still an opportunity. I use the time to record my content for the week.",
+        nugget: "It doesn't matter who shows up as long as you do."
+      },
+      {
+        emoji: "🔁",
+        title: "Repurpose.io Cross-Posting",
+        lesson: "Record your TikToks once. Use Repurpose.io to automatically cross-post every TikTok to YouTube Shorts and Instagram Reels. One recording, three platforms, zero extra effort. This is how you show up on every platform without creating three separate pieces of content. Work smarter.",
+        before: "Showing up on three platforms requires three times the content creation.",
+        after: "One TikTok recording automatically becomes YouTube Shorts and Instagram Reels.",
+        nugget: "I record it once on TikTok. Repurpose.io does the rest."
+      },
+      {
+        emoji: "🎭",
+        title: "Native Short-Form vs. Repurposed",
+        lesson: "There's a critical difference between natively creating a TikTok and clipping a YouTube video. The Repurposing Engine doesn't verbatim-cut your YouTube — it identifies standalone moments and orients them for a cold audience who's never met you. Re-record them as TikToks. Never just post raw YouTube clips.",
+        before: "I can just clip my YouTube videos and post them directly on TikTok.",
+        after: "I re-record short-form content natively. It's oriented for strangers, not subscribers.",
+        nugget: "Your YouTube was made for your audience. TikTok content is made for strangers."
+      },
+      {
+        emoji: "🌊",
+        title: "Your Human Design Informs Your Style",
+        lesson: "Projectors go deep on one subject and let wisdom flow — quality over quantity. Manifestors share their vision, speak it into existence, and don't hold back. Generators respond and give people things to react to. Manifesting Generators follow excitement and show what they're working on. Reflectors sample the room. Your type is your style.",
+        before: "There's one right way to show up on TikTok and I need to figure it out.",
+        after: "My Human Design type IS my TikTok strategy. I stop borrowing other people's approaches.",
+        nugget: "Stop following other people's content strategies when you were born with your own."
+      },
+      {
+        emoji: "⏱️",
+        title: "Findable Over Viral",
+        lesson: "Going viral is fun, but it's a bonus. What we actually want is to be findable and discoverable — showing up when the right people search for what you do. A video that gets 500 views from your exact ideal client is worth more than 50,000 views from people who will never buy anything from you.",
+        before: "Going viral is the goal of TikTok content.",
+        after: "Findability is the goal. 500 views from my ideal client beats 50,000 from the wrong people.",
+        nugget: "Going viral is fun, but it's a bonus. What we want is to be findable."
+      },
+      {
+        emoji: "📊",
+        title: "Track and Win Streak",
+        lesson: "The daily tracker shows your streak — how many consecutive days you've shown up. Every piece of content published, every DM sent, every Skool post — it's all tracked. Seeing your streak makes it harder to quit. Every little piece of momentum counts. Put everything in your tracker for your full wins.",
+        before: "I'll start tracking my metrics when I have results worth tracking.",
+        after: "I track from day one. The streak makes consistency feel like a game I'm winning.",
+        nugget: "Every little piece of momentum counts. Don't dismiss any of it."
+      },
+      {
+        emoji: "🌙",
+        title: "The Evening Debrief Loop",
+        lesson: "The evening debrief is where growth actually happens. What worked? What didn't? What content idea came up today? Rate your energy. Every reflection that goes in your tracker becomes material for future content. The loop is: create → reflect → improve → create better. This is how you compound.",
+        before: "Journaling and reflection are nice to have but not essential for business.",
+        after: "My evening debrief is a content mine and a compounding loop. It's essential, not optional.",
+        nugget: "The work always works. But the debrief is how you make the work work better."
+      }
+    ]
+  },
+  {
+    day: 6,
+    title: "The Well That Never Runs Dry",
+    node: "THE NORTH STAR",
+    platform: "Weekly Content Flow",
+    emoji: "⭐",
+    color: "#88E0A0",
+    lessons: [
+      {
+        emoji: "⭐",
+        title: "One Anchor Powers Everything",
+        lesson: "You start the week with one piece of anchor content — a YouTube video, a Loom training, or a coaching call transcript. That single source powers your entire week: Skool community posts, Instagram carousels, TikTok and Instagram Reels, hot takes for stories, and even an interactive freebie artifact. One source. Everywhere.",
+        before: "I need to create new content for every platform every week.",
+        after: "One anchor piece of content is enough to be omnipresent all week without creating anything new.",
+        nugget: "One recording. Your entire content week. Done."
+      },
+      {
+        emoji: "🔄",
+        title: "Omnipresent Without Overwhelm",
+        lesson: "The goal is not to be everywhere all the time. The goal is to appear everywhere to your ideal client without working yourself to the bone creating new content. By strategically repurposing one anchor into multiple formats, you appear omnipresent to your audience while actually only creating once.",
+        before: "Being visible everywhere requires constant new content creation.",
+        after: "Omnipresence is a repurposing strategy, not a content creation marathon.",
+        nugget: "You can be omnipresent without creating anything new. That's the whole game."
+      },
+      {
+        emoji: "📱",
+        title: "The Weekly Content Rhythm",
+        lesson: "Sunday: pick your YouTube topic and title. Monday: script and record. Tuesday: edit and upload to YouTube. Wednesday: run the Weekly Content Engine — generate all Skool posts, carousels, shorts, and captions. Schedule everything. Thursday: engage. Friday: review metrics and capture insights. Saturday/Sunday: rest. This IS the system.",
+        before: "I'll post when inspiration strikes and hope for consistency.",
+        after: "My weekly rhythm is the system. I follow it like a ritual, not a to-do list.",
+        nugget: "Consistency is a system problem, not a motivation problem."
+      },
+      {
+        emoji: "📸",
+        title: "Canva Bulk Create for Carousels",
+        lesson: "The Weekly Content Engine generates three Instagram carousel scripts from your anchor content. Take those scripts, paste them into Canva's Bulk Create feature, and watch your carousel populate automatically. A week of Instagram carousels in minutes. Design once, apply to all slides, download, post.",
+        before: "Creating carousels takes too much time to be sustainable.",
+        after: "Canva Bulk Create turns my carousel scripts into finished designs in minutes.",
+        nugget: "Your whole carousel week done in one Canva session. That's the move."
+      },
+      {
+        emoji: "🤖",
+        title: "The Freebie Artifact Strategy",
+        lesson: "Take your anchor transcript, paste it into the Weekly Content Engine's freebie prompt section, and it generates 5 interactive Claude artifact concepts — each with a build prompt you can paste directly into Claude. The resulting tool lives in your Skool community as a free resource people actually want to join for.",
+        before: "I need design skills and tech knowledge to create valuable digital tools.",
+        after: "I describe my transformation and AI builds the tool. Then I give it away to grow my community.",
+        nugget: "People don't join your community because you have one. They join because there's something inside they want."
+      },
+      {
+        emoji: "📊",
+        title: "The 5 Post Types in Rotation",
+        lesson: "The Weekly Content Engine generates 3–5 Skool community posts from your anchor content — rotated across Educational, Discussion, Transparency, Collaboration, and Personal Connection categories. Your community feed stays alive without you manually brainstorming every post. The system feeds the community.",
+        before: "I have to manually come up with fresh Skool post ideas every week.",
+        after: "My anchor content automatically generates a week of varied Skool posts. I just edit and post.",
+        nugget: "A thriving community doesn't require constant new ideas. It requires a system."
+      },
+      {
+        emoji: "🌊",
+        title: "Sales Are the Lagging Indicator",
+        lesson: "Visitors, engagement, profile activity, discovery rank — these are leading indicators. They move first. Sales move last. When you're not seeing sales yet, check your leading indicators. If they're growing, you're on track. If they're flat, that's your feedback. The number you can control is the number you track daily.",
+        before: "If I'm not seeing sales, what I'm doing isn't working.",
+        after: "Sales are the last thing to move. I track leading indicators to know I'm on track.",
+        nugget: "Your daily metrics tell the story before the sale does."
+      },
+      {
+        emoji: "💬",
+        title: "DMs Are the Harvest",
+        lesson: "Every piece of content you create is either starting a conversation or deepening one. The content plants the seed. The DM is the harvest. Someone who comments on your TikTok, clicks through to your Skool, gets your freebie, and then sends you a DM — that person already trusts you. You're not selling; you're confirming.",
+        before: "I need to do outreach and cold DM to find clients.",
+        after: "My content warms people up. By the time they DM me, they've already decided.",
+        nugget: "Sales always happen through conversations. Your content just starts them before you arrive."
+      },
+      {
+        emoji: "✨",
+        title: "Create It In Your Business First",
+        lesson: "Every tool, every strategy, every framework — you test it in your own business before you share it with your community. You don't teach theory. You share what's actually working for you right now. This isn't just an integrity principle — it's what makes your content convert. You're always one step ahead of your clients.",
+        before: "I can teach strategies I've learned from other people even if I haven't tested them.",
+        after: "I create in my business first. I share results, not theory. That's what converts.",
+        nugget: "Everything I teach, I've done first. That's what makes it real."
+      },
+      {
+        emoji: "🏆",
+        title: "Progress Beats Perfection",
+        lesson: "The before and after metrics in your tracker exist so you can see how far you've come — not just where you're going. When you open the tracker on day 28 and see day 1's starting numbers, you will feel a shift. Growth is hard to see in real time. The tracker makes it undeniable.",
+        before: "I should only celebrate results when I hit my big goals.",
+        after: "Every improvement in my metrics is a result worth tracking and celebrating.",
+        nugget: "You'll see your before and after. And that changes everything."
+      },
+      {
+        emoji: "⚡",
+        title: "AI Is Your Team",
+        lesson: "You are running a multi-platform content operation with one person. AI is not a shortcut — it is your team. Claude builds the tools, writes the captions, generates the carousels, surfaces the hot takes, and creates the freebie artifacts. You bring the wisdom, the story, and the lived experience. You can't be replaced. AI just handles everything else.",
+        before: "Using AI for my content feels like cheating or like it's not really me.",
+        after: "I bring the wisdom and the story. AI handles the execution. Together we're unstoppable.",
+        nugget: "AI is your team. You are the irreplaceable CEO."
+      },
+      {
+        emoji: "🌱",
+        title: "Visibility Systems Make Sales Inevitable",
+        lesson: "This is a never-ending game. You don't build visibility once and stop. You build systems that keep you visible consistently so that sales become inevitable over time. The question stops being 'will I get clients this month?' and starts being 'how many clients are in the pipeline from last month's content?' That's the shift.",
+        before: "I can never predict whether I'll have consistent income in my business.",
+        after: "When my visibility is systematic, my sales become inevitable. Predictability is a system.",
+        nugget: "We get to always be visible so that sales become inevitable. That's the whole game."
+      }
+    ]
+  }
+];
+
+// ── STATE ──────────────────────────────────────────────────────────────────────
+let activeDay = parseInt(localStorage.getItem('ff_day') || '0');
+let activeNode = parseInt(localStorage.getItem('ff_node') || '0');
+let activeTab = 'lesson';
+
+// ── STARS ─────────────────────────────────────────────────────────────────────
+function buildStars() {
+  const sf = document.getElementById('starfield');
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2.5 + 0.5;
+    s.style.cssText = `
+      width:${size}px; height:${size}px;
+      top:${Math.random()*100}%; left:${Math.random()*100}%;
+      --d:${3+Math.random()*5}s; --delay:-${Math.random()*8}s;
+      --min-op:${0.05+Math.random()*0.15}; --max-op:${0.4+Math.random()*0.6};
+    `;
+    sf.appendChild(s);
+  }
+}
+
+// ── DAY TABS ──────────────────────────────────────────────────────────────────
+function renderDayTabs() {
+  const container = document.getElementById('dayTabs');
+  container.innerHTML = DAYS.map((d, i) => `
+    <div class="day-tab ${i === activeDay ? 'active' : ''}" onclick="selectDay(${i})">
+      <span class="day-tab-icon">${d.emoji}</span>
+      <span class="day-tab-info">
+        <span class="day-tab-num">Day ${d.day}</span>
+        <span class="day-tab-name">${d.node}</span>
+      </span>
+    </div>
+  `).join('');
+}
+
+// ── SECTION HEADER ─────────────────────────────────────────────────────────────
+function renderSectionHeader() {
+  const d = DAYS[activeDay];
+  document.getElementById('sectionTitle').textContent = `${d.emoji} ${d.node}`;
+  document.getElementById('sectionSub').textContent = `Day ${d.day}: ${d.title} — ${d.lessons.length} lessons`;
+}
+
+// ── NODES ─────────────────────────────────────────────────────────────────────
+const ORB_COLORS = ['#8B7FE8','#C4A0F0','#FF6B6B','#4ECFCF','#F0C060','#88E0A0'];
+
+function renderNodes() {
+  const d = DAYS[activeDay];
+  const color = ORB_COLORS[activeDay];
+  const track = document.getElementById('nodesTrack');
+  track.innerHTML = d.lessons.map((l, i) => {
+    const dots = Array(5).fill(0).map((_, di) => `<div class="energy-dot ${di < 3 ? 'lit' : ''}"></div>`).join('');
+    return `
+      <div class="node ${i === activeNode ? 'active' : ''}" style="--orb-color:${color}" onclick="selectNode(${i})">
+        <div class="node-orb">
+          ${l.emoji}
+          <div class="node-star">★</div>
+        </div>
+        <div class="node-title">${l.title}</div>
+        <div class="node-energy">${dots}</div>
+      </div>
+    `;
+  }).join('');
+
+  // scroll active node into view
+  setTimeout(() => {
+    const activeEl = track.querySelector('.node.active');
+    if (activeEl) activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }, 100);
+}
+
+// ── LESSON PANEL ──────────────────────────────────────────────────────────────
+function renderLesson() {
+  const d = DAYS[activeDay];
+  const l = d.lessons[activeNode];
+  const total = d.lessons.length;
+  const color = ORB_COLORS[activeDay];
+
+  const inner = document.getElementById('lessonInner');
+  inner.innerHTML = `
+    <div class="lesson-breadcrumb">Day ${d.day} — ${d.node} · ${d.platform}</div>
+    <div class="lesson-title-row">
+      <div class="lesson-emoji-badge" style="border-color:${color}33; background: ${color}11">${l.emoji}</div>
+      <div class="lesson-title">${l.title}</div>
+    </div>
+
+    <div class="lesson-tabs">
+      <div class="l-tab ${activeTab === 'lesson' ? 'active' : ''}" onclick="switchTab('lesson')">📖 Lesson</div>
+      <div class="l-tab ${activeTab === 'belief' ? 'active' : ''}" onclick="switchTab('belief')">🔄 Belief Shift</div>
+    </div>
+
+    <div class="lesson-body ${activeTab === 'lesson' ? 'visible' : ''}" id="tabLesson">
+      <p class="lesson-text">${l.lesson}</p>
+      <div class="gold-nugget">
+        <div class="nugget-label">🌙 Gold Nugget</div>
+        <div class="nugget-text">${l.nugget}</div>
+      </div>
+    </div>
+
+    <div class="lesson-body ${activeTab === 'belief' ? 'visible' : ''}" id="tabBelief">
+      <div class="belief-row">
+        <div class="belief-before">
+          <div class="belief-label">Before</div>
+          <div class="belief-text">${l.before}</div>
+        </div>
+        <div class="belief-arrow">↓</div>
+        <div class="belief-after">
+          <div class="belief-label">After</div>
+          <div class="belief-text">${l.after}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lesson-nav">
+      <button class="nav-btn" onclick="prevNode()" ${activeNode === 0 ? 'disabled' : ''}>← Prev</button>
+      <span class="nav-counter">${activeNode + 1} of ${total}</span>
+      <button class="nav-btn next" onclick="nextNode()" ${activeNode === total - 1 ? 'disabled' : ''}>Next →</button>
+    </div>
+  `;
+}
+
+// ── ACTIONS ───────────────────────────────────────────────────────────────────
+function selectDay(i) {
+  activeDay = i;
+  activeNode = 0;
+  activeTab = 'lesson';
+  localStorage.setItem('ff_day', i);
+  localStorage.setItem('ff_node', 0);
+  renderDayTabs();
+  renderSectionHeader();
+  renderNodes();
+  renderLesson();
+}
+
+function selectNode(i) {
+  activeNode = i;
+  activeTab = 'lesson';
+  localStorage.setItem('ff_node', i);
+  renderNodes();
+  renderLesson();
+  // scroll panel into view on mobile
+  document.getElementById('lessonPanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function switchTab(tab) {
+  activeTab = tab;
+  renderLesson();
+}
+
+function nextNode() {
+  const max = DAYS[activeDay].lessons.length - 1;
+  if (activeNode < max) selectNode(activeNode + 1);
+}
+
+function prevNode() {
+  if (activeNode > 0) selectNode(activeNode - 1);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+buildStars();
+renderDayTabs();
+renderSectionHeader();
+renderNodes();
+renderLesson();
+</script>
+</body>
+</html>
